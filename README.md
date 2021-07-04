@@ -9,7 +9,7 @@ Pored instaliranog Python-a, od softvera je potrebno instalirati sledece bibliot
 - matplotlib
 - keras
 - tensorflow
-- opnencv - cv2
+- opencv - cv2
 - skimage
 - pandas
 - PIL
