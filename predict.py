@@ -1,19 +1,17 @@
-from PIL import Image
 from keras.models import model_from_json
-from keras.models import load_model
 from keras.preprocessing import image
 import matplotlib.pyplot as plt
 import numpy as np
-import os
+
 
 def load_image(filename, show=False):
     img = image.load_img(filename, target_size=(55, 55))
     img_tensor = image.img_to_array(img)
     img_tensor = np.expand_dims(img_tensor, axis=0)
-    img_tensor /= 255.
 
     if show:
-        plt.imshow(img_tensor[0])
+        img_tensor2 = img_tensor / 255.
+        plt.imshow(img_tensor2[0])
         plt.axis('off')
         plt.show()
 
@@ -21,21 +19,24 @@ def load_image(filename, show=False):
 
 
 if __name__ == "__main__":
-    json_file = open('model.json', 'r')
+    json_file = open('model_clahe.json', 'r')
     loaded_model_json = json_file.read()
     json_file.close()
     loaded_model = model_from_json(loaded_model_json)
-    # load weights into new model
-    loaded_model.load_weights("model.h5")
+    loaded_model.load_weights("model_clahe.h5")
     print("Loaded model from disk")
 
     loaded_model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
 
     # image path
-    img_path = 'test_data_randoms/no_passing.jpg'
+    img_path = ''
+
+    if len(img_path) == 0:
+        print("Niste izabrali putanju!")
+        quit()
 
     # load a single image
-    new_image = load_image(img_path)
+    new_image = load_image(img_path, True)
 
     # check prediction
     pred = loaded_model.predict(new_image)
@@ -46,10 +47,10 @@ if __name__ == "__main__":
                  2: "zabranjeno preticanje",
                  3: "raskrsnica na gl putu",
                  4: "pravo prvenstva",
-                 5: "obavezno zaustavljanje",
+                 5: "raskrsnica sa glavnim putem",
                  6: "stop znak",
                  7: "zabranjen smer",
-                 8: "uzvicnik",
+                 8: "opasnost na putu",
                  9: "radovi na putu",
                  10: "jelen",
                  11: "obavezno pravo",
